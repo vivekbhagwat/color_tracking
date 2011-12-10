@@ -28,8 +28,6 @@ for i = 1:size(blob_pixel_mask,1)
             if(i > 1 && j > 1 && ...
                     blobs(i-1,j) ~= blobs(i,j-1) && ...
                     blobs(i-1,j) ~= 0 && blobs(i,j-1) ~= 0)
-                disp ' '
-                disp(blobs(i,j-1));
                 
                 blob_mapper(blobs(i,j-1)) = blobs(i-1,j);
                 blobs(i,j) = blobs(i,j-1);
@@ -47,13 +45,22 @@ for i = 1:size(blob_pixel_mask,1)
     end
 end
 
+% disp(size(blob_mapper));
 for i = 1:size(blobs,1)
+%     disp(i);
     for j = 1:size(blobs,2)
+%         disp(j);
+%          disp(blobs(i,j));
+%          disp(blob_mapper(blobs(i,j)));
+%          disp(blob_mapper(300));
+%          fflush(stdout)
         while(blob_mapper(blobs(i,j)) ~= blobs(i,j))
             blobs(i,j) = blob_mapper(blobs(i,j));
+%             disp(blobs(i,j));
         end
         blob_counter(blobs(i,j)) = blob_counter(blobs(i,j)) + 1;
     end
+%     clc
 end
 
 biggest_blob_index = 1;
