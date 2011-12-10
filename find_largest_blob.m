@@ -1,4 +1,4 @@
-function [center, area] = find_largest_blob(img, color)
+function [center, area] = find_largest_blob( img, color )
 
 range = 20;
 red_color = color(1); green_color = color(2); blue_color = color(3);
