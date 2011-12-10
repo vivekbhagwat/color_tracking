@@ -1,12 +1,11 @@
 function [ ] = main( serPort )
 
-CAMERA_URL = 'adirobot.';
-
-image = imread(strcat('http://http://', CAMERA_URL, ...
-    '/img/snapshot.cgi?=3&quality=1'));
-color = ChoosePoint(image);
+img = GetImage();
+color = ChoosePoint(img);
 
 while (1)
+    img = GetImage();
+    % find_largest_blob();
     % vivek's stuff
     
     pos = [];
