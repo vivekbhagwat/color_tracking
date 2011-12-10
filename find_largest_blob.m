@@ -22,14 +22,26 @@ current_blob = 0;
 blob_mapper = [];
 blob_counter = [];
 
+% go through and assign labels
 for i = 1:size(blob_pixel_mask,1)
     for j = 1:size(blob_pixel_mask,2)
         if(blob_pixel_mask(i,j) == 1)
             if(i > 1 && j > 1 && ...
                     blobs(i-1,j) ~= blobs(i,j-1) && ...
                     blobs(i-1,j) ~= 0 && blobs(i,j-1) ~= 0)
-                
-                blob_mapper(blobs(i,j-1)) = blobs(i-1,j);
+                % follow labels backwards
+                uplabel = blobs(i,j-1);
+                lowlabel = blobs(i-1,j);
+                while blob_mapper(uplabel) ~= uplabel
+                    uplabel = blob_mapper(uplabel);
+                end
+                while blob_mapper(lowlabel) ~= lowlabel
+                    lowlabel = blob_mapper(lowlabel);
+                end
+                if uplabel ~= lowlabel
+                    blob_mapper(lowlabel) = uplabel;
+                end
+                % blob_mapper(blobs(i,j-1)) = blobs(i-1,j);
                 blobs(i,j) = blobs(i,j-1);
             elseif(i > 1 && blob_pixel_mask(i-1,j) == 1)
                 blobs(i,j) = blobs(i-1,j);
@@ -45,24 +57,22 @@ for i = 1:size(blob_pixel_mask,1)
     end
 end
 
-% disp(size(blob_mapper));
+% fix equivalencies
 for i = 1:size(blobs,1)
-%     disp(i);
     for j = 1:size(blobs,2)
-%         disp(j);
-%          disp(blobs(i,j));
-%          disp(blob_mapper(blobs(i,j)));
-%          disp(blob_mapper(300));
-%          fflush(stdout)
-        while(blob_mapper(blobs(i,j)) ~= blobs(i,j))
-            blobs(i,j) = blob_mapper(blobs(i,j));
-%             disp(blobs(i,j));
+        if(blobs(i,j) == 0)
+            break
         end
+        label = blobs(i,j);
+        while(blob_mapper(label) ~= label)
+            label = blob_mapper(label);
+        end
+        blob(i,j) = label;
         blob_counter(blobs(i,j)) = blob_counter(blobs(i,j)) + 1;
     end
-%     clc
 end
 
+% find the biggest blob
 biggest_blob_index = 1;
 for i = 1:size(blob_counter)
     if blob_counter(i) > blob_counter(biggest_blob_index)
@@ -70,6 +80,7 @@ for i = 1:size(blob_counter)
     end
 end
 
+% find the center
 sum_x = 0;
 sum_y = 0;
 for i = 1:size(blobs,1)
@@ -85,10 +96,9 @@ area = blob_counter(biggest_blob_index);
 
 center = [sum_x / area, sum_y / area];
 
-disp(center);
-disp(area);
+% disp(center);
+% disp(area);
 
-% return [center, area];
-
+end
 
 
