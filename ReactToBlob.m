@@ -1,9 +1,10 @@
-function [ react ] = ReactToBlob( serPort, dpos, darea)
+function [ react ] = ReactToBlob( serPort, dx, darea)
+% dpos = number between (-1.0, 1.0), 
 
 angle_gain = 1.0;
+foward_speed = 0.1;
 
-% we only care about the x coordinate
-dx = dpos(1);
+scale_threshold = 0.5;
 
 % amount of turn
 angle = angle_gain*dx;
@@ -21,4 +22,3 @@ else
 end
 
 end
-
