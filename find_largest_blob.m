@@ -49,7 +49,9 @@ end
 
 for i = 1:size(blobs,1)
     for j = 1:size(blobs,2)
-        blobs(i,j) = blob_mapper(blobs(i,j));
+        while(blob_mapper(blobs(i,j)) ~= blobs(i,j))
+            blobs(i,j) = blob_mapper(blobs(i,j));
+        end
         blob_counter(blobs(i,j)) = blob_counter(blobs(i,j)) + 1;
     end
 end
