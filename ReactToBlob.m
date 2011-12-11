@@ -1,8 +1,8 @@
 function [ react ] = ReactToBlob( serPort, dx, darea)
 % dpos = number between (-1.0, 1.0), 
 
-angle_gain = pi/6; % maximum angular speed
-forward_speed = 0.03; % base speed
+angle_gain = pi/4; % maximum angular speed
+forward_speed = 0.05; % base speed
 
 % thresholds to test against
 scale_threshold = 0.2;
