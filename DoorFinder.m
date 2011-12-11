@@ -1,0 +1,7 @@
+function [ ] = DoorFinder(serPort)
+
+    
+
+end
+
+
