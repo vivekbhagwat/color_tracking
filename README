@@ -1,0 +1,11 @@
+Robotics Assignment #5
+Nathan and Vivek (nyh2105, vsb2110)
+===================================
+
+Part 1
+-----------------------------------
+To run, pass serPort to main
+
+Part 2
+-----------------------------------
+To run, pass serPort to DoorFinder
