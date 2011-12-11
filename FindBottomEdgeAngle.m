@@ -64,6 +64,7 @@ midx = round(size(img, 2)/2);
 miny = size(img, 1);
 minth = -1;
 minr = -1;
+% DEBUG
 figure
 hold off
 clf
@@ -75,8 +76,9 @@ for i = 1:size(h_array,1)
         end
         theta = i/size(h_array,1) * pi;
         r = (j/size(h_array,2)-0.5) * 2*max_r;
+        % DEBUG
         x = 0:1:size(img,2);
-        y = -cos(theta)/sin(theta)*x + r/sin(theta);
+        y = (sin(theta)*x + r)/cos(theta);
         disp([theta,r]);
         plot(x,y);
         if ~(theta > th_bounds90(1) && theta < th_bounds90(2) ||...
@@ -100,4 +102,3 @@ disp(miny);
 % find lowest line
 
 end
-
