@@ -27,6 +27,7 @@ while (1)
         disp(err);
         % stop the robot, prevent robot chases
         ReactToBlob(serPort, 0.0, 1.0);
+        pause(1.0);
     end
 end
 
