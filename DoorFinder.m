@@ -26,9 +26,15 @@ function [ ] = DoorFinder(serPort)
     
     dx = (position - center)/center(1);
     %centers on door
-    while(1) %fix
-        
+    while(abs(dx) > 0.1) %fix
+        dx = (position - center)/center(1);
         SetFwdVelAngVelCreate(serPort, 0, sign(dx) * pi/6);
+        
+        
+        img = GetImage();
+        [position, area] = find_largest_blob(img, color);
+    
+        dx = (position - center)/center(1);
     end
     %move until bump
     %move back

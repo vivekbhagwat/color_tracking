@@ -1,6 +1,6 @@
-function [center, area] = find_largest_blob( img, color )
+function [middle, area] = find_largest_blob( img, color )
 
-range = 25;
+range = 50;
 
 color = double(color);
 red_color = color(1);
@@ -15,7 +15,7 @@ blob_pixel_mask = sqrt((1.0*img(:,:,1)-1.0*red_color).^2+ ...
 
 blobs = zeros(size(blob_pixel_mask,1), size(blob_pixel_mask,2));
 
-% imshow(blob_pixel_mask)
+imshow(blob_pixel_mask)
 
 current_blob = 0;
 
@@ -72,6 +72,8 @@ for i = 1:size(blobs,1)
 end
 
 [area,biggest_blob_index] = max(blob_counter);
+disp(blob_counter);
+
 
 area_dims = size(area);
 if area_dims(1) == 0
@@ -93,7 +95,8 @@ for i = 1:size(blobs,1)
     end
 end
 
-center = [sum_x / area, sum_y / area];
+disp(size(area));
+middle = [sum_x / area, sum_y / area];
 
 % DEBUG
 %c = round(center);
@@ -104,7 +107,7 @@ center = [sum_x / area, sum_y / area];
 %img = uint8(img);
 %imshow(img)
 
-disp(center);
+disp(middle);
 disp(area);
 
 end
