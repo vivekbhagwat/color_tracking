@@ -1,6 +1,6 @@
 function [middle, area] = find_largest_blob( img, color )
 
-range = 80;
+range = 50;
 
 color = double(color);
 red_color = color(1);
