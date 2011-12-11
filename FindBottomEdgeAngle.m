@@ -27,19 +27,67 @@ edge_img = sqrt(conv2(sobeldx, big_blob_mask).^2 + ...
                 conv2(sobeldy, big_blob_mask).^2);
 
 % run a line hough transform on it
-h_array = zeros(50,50); % accumulator array (theta, rho)
+h_array = zeros(150,150); % accumulator array (theta, rho)
+max_r = sqrt(size(edge_img,1).^2 + size(edge_img,2).^2);
 edge_img = edge_img > 0.5; % thresh the edge
 for i = 1:size(edge_img,1)
     for j = 1:size(edge_img,2)
         for a = 1:size(h_array,1)
             theta = a/size(h_array,1)*2*pi;
-            r = round(j*cos(theta) + i*sin(theta));
+            % flip the image here
+            rho = j*cos(theta) + i*sin(theta);
+            r = round((rho/(2*max_r)+0.5)*size(h_array,2));
+            r = min(max(r, 1), size(h_array, 2));
             h_array(a,r) = 1 + h_array(a,r);
         end
     end
 end
 
-imshow(h_array);
+% find the local maxima
+% can get a better max with iterative max(max())
+h_max = max(max(h_array));
+h_array = double(h_array > 0.98*h_max);
+
+% DEBUG convert to uint
+%m = max(max(h_array));
+%h_array = uint8(255*(h_array/m).^8);
+%imshow(h_array);
+
+% reject non-horizontal lines
+a_thresh = 45;
+th_bounds90 = [((90-a_thresh)*pi/180),...
+                  ((90+a_thresh)*pi/180)];
+th_bounds270 = [((270-a_thresh)*pi/180),...
+                   ((270+a_thresh)*pi/180)];
+% find lowest line
+midx = round(size(img, 2)/2);
+miny = size(img, 1);
+minth = -1;
+minr = -1;
+for i = 1:size(h_array,1)
+    for j = 1:size(h_array,2)
+        if h_array(i,j) == 0
+            continue
+        end
+        theta = i/size(h_array,1) * 2*pi;
+        % disp(theta);
+        if ~(theta > th_bounds90(1) && theta < th_bounds90(2) ||...
+             theta > th_bounds270(1) && theta < th_bounds270(2))
+            continue;
+        end
+        r = (j/size(h_array,2)-0.5) * 2*max_r;
+        % find lowest y
+        y = -cos(theta)/sin(theta)*midx + r/sin(theta);
+        if y < miny && y > 0
+            miny = y;
+            minth = theta;
+            minr = r;
+        end
+    end
+end
+disp(minth);
+disp(minr);
+disp(miny);
 
 % find lowest line
 
