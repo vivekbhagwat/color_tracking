@@ -8,6 +8,7 @@ center = center(1:2);
 [~, area] = find_largest_blob(img, color);
 
 while (1)
+    % find the largest blob of the given color
     img = GetImage();
     [position, new_area] = find_largest_blob(img, color);
 
