@@ -26,9 +26,20 @@ sobeldy = reshape([[-1,-2,-1],[0,0,0],[1,2,1]], 3,3);
 edge_img = sqrt(conv2(sobeldx, big_blob_mask).^2 + ...
                 conv2(sobeldy, big_blob_mask).^2);
 
-imshow(edge_img);
 % run a line hough transform on it
+h_array = zeros(50,50); % accumulator array (theta, rho)
+edge_img = edge_img > 0.5; % thresh the edge
+for i = 1:size(edge_img,1)
+    for j = 1:size(edge_img,2)
+        for a = 1:size(h_array,1)
+            theta = a/size(h_array,1)*2*pi;
+            r = round(j*cos(theta) + i*sin(theta));
+            h_array(a,r) = 1 + h_array(a,r);
+        end
+    end
+end
 
+imshow(h_array);
 
 % find lowest line
 
