@@ -78,7 +78,7 @@ disp(blob_counter);
 area_dims = size(area);
 if area_dims(1) == 0
     area = -1;
-    center = [0,0];
+    middle = [0,0];
     return
 end
 
@@ -99,7 +99,7 @@ disp(size(area));
 middle = [sum_x / area, sum_y / area];
 
 % DEBUG
-%c = round(center);
+%c = round(middle);
 %dim = size(img);
 %ly = max(c(1) - 10, 1); uy = min(c(1) + 10, dim(2));
 %lx = max(c(2) - 10, 1); ux = min(c(2) + 10, dim(1));
