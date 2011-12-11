@@ -43,15 +43,15 @@ for i = 1:size(edge_img,1)
     end
 end
 
+% DEBUG convert to uint
+%m = max(max(h_array));
+%h_array = uint8(255*(h_array/m).^1);
+%imshow(h_array);
+
 % find the local maxima
 % can get a better max with iterative max(max())
 h_max = max(max(h_array));
 h_array = double(h_array > 0.98*h_max);
-
-% DEBUG convert to uint
-%m = max(max(h_array));
-%h_array = uint8(255*(h_array/m).^8);
-%imshow(h_array);
 
 % reject non-horizontal lines
 a_thresh = 45;
@@ -64,13 +64,21 @@ midx = round(size(img, 2)/2);
 miny = size(img, 1);
 minth = -1;
 minr = -1;
+figure
+hold off
+clf
+hold on
 for i = 1:size(h_array,1)
     for j = 1:size(h_array,2)
         if h_array(i,j) == 0
             continue
         end
-        theta = i/size(h_array,1) * 2*pi;
-        % disp(theta);
+        theta = i/size(h_array,1) * pi;
+        r = (j/size(h_array,2)-0.5) * 2*max_r;
+        x = 0:1:size(img,2);
+        y = -cos(theta)/sin(theta)*x + r/sin(theta);
+        disp([theta,r]);
+        plot(x,y);
         if ~(theta > th_bounds90(1) && theta < th_bounds90(2) ||...
              theta > th_bounds270(1) && theta < th_bounds270(2))
             continue;
