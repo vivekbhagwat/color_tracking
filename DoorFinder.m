@@ -21,26 +21,51 @@ function [ ] = DoorFinder(serPort)
         [~, area] = find_largest_blob(img, color);
     end
     
+    
+    angle = 45; %THIS WILL USE NATHAN'S METHOD
+    turnAngle(serPort, turnSpeed, angle);
+    
     img = GetImage();
     [position, area] = find_largest_blob(img, color);
     
     dx = (position - center)/center(1);
-    %centers on door
-    while(abs(dx) > 0.1) %fix
-        dx = (position - center)/center(1);
-        SetFwdVelAngVelCreate(serPort, 0, sign(dx) * pi/6);
-        
+    SetFwdVelAngVelCreate(serPort, 0.1, 0);
+    pause(0.5);
+    turnAngle(serPort,turnSpeed,-1*sign(angle)*90);    
+    
+    %should be perpendicular to door at this point.
+    
+    while(abs(dx) > 0.1)
+        turnAngle(serPort,turnSpeed,sign(dx)*90);
+        pause(0.5);
+        SetFwdVelAngVelCreate(serPort,0.1,0);
+        pause(0.5);
+        turnAngle(serPort,turnSpeed,-1*sign(dx)*90);
         
         img = GetImage();
         [position, area] = find_largest_blob(img, color);
     
         dx = (position - center)/center(1);
     end
+    %centers on door
+    
+    
+    
+%     while(abs(dx) > 0.1) %fix
+%         dx = (position - center)/center(1);
+%         SetFwdVelAngVelCreate(serPort, 0, sign(dx) * pi/6);
+%         
+%         
+%         img = GetImage();
+%         [position, area] = find_largest_blob(img, color);
+%     
+%         dx = (position - center)/center(1);
+%     end
     %move until bump
     for i = 1:2
         [br,bl, wr,wl,wc, bf] = BumpsWheelDropsSensorsRoomba(serPort);
         while ~(br || bl || bf)
-            
+            %move forward.
         end
     end
     %move back
