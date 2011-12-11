@@ -1,11 +1,9 @@
-function [middle, area] = find_largest_blob( img, color )
+function [ mask ] = MaskSmallBlobs( img )
+% lifted 50% off from find_largest_blob
 
-% find all the colors similar to the given
-blob_pixel_mask = ThersholdColor(img, color);
+blob_pixel_mask = img;
 
 blobs = zeros(size(blob_pixel_mask,1), size(blob_pixel_mask,2));
-
-imshow(blob_pixel_mask)
 
 current_blob = 0;
 
@@ -61,43 +59,22 @@ for i = 1:size(blobs,1)
     end
 end
 
-[area,biggest_blob_index] = max(blob_counter);
-disp(blob_counter);
-
+[area, biggest_blob_index] = max(blob_counter);
 
 area_dims = size(area);
 if area_dims(1) == 0
-    area = -1;
-    middle = [0,0];
+    mask = -1;
     return
 end
 
-% find the center
-sum_x = 0;
-sum_y = 0;
+mask = zeros(size(blob_pixel_mask,1), size(blob_pixel_mask,2));
+% scan through and only let the biggest mask through
 for i = 1:size(blobs,1)
     for j = 1:size(blobs,2)
         if(blobs(i,j) == biggest_blob_index)
-            % flipped indicies, array access is backwards
-            sum_y = sum_y + i;
-            sum_x = sum_x + j;
+            mask(i,j) = 1;
         end
     end
 end
-
-disp(size(area));
-middle = [sum_x / area, sum_y / area];
-
-% DEBUG
-%c = round(middle);
-%dim = size(img);
-%ly = max(c(1) - 10, 1); uy = min(c(1) + 10, dim(2));
-%lx = max(c(2) - 10, 1); ux = min(c(2) + 10, dim(1));
-%img([ly:uy], [lx:ux],:) = 255;
-%img = uint8(img);
-%imshow(img)
-
-disp(middle);
-disp(area);
 
 end
