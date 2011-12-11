@@ -75,6 +75,13 @@ end
 disp(blob_counter);
 
 
+area_dims = size(area);
+if area_dims(1) == 0
+    area = -1;
+    center = [0,0];
+    return
+end
+
 % find the center
 sum_x = 0;
 sum_y = 0;
