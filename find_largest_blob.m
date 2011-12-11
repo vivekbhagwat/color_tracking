@@ -1,21 +1,21 @@
 function [center, area] = find_largest_blob( img, color )
 
-range = 20;
-red_color = color(1); green_color = color(2); blue_color = color(3);
+range = 25;
 
-blob_pixel_mask = img(:,:,1) > red_color - range & ...
-    img(:,:,1) < red_color + range * ...
-    img(:,:,2) > blue_color - range & ...
-    img(:,:,2) < blue_color + range & ...
-    img(:,:,3) > green_color - range & ...
-    img(:,:,3) < green_color + range;
+color = double(color);
+red_color = color(1);
+green_color = color(2);
+blue_color = color(3);
 
-%blob_pixel_mask is 2d array, 
-imshow(blob_pixel_mask)
+% find RGB distance away from goal color
+img = double(img);
+blob_pixel_mask = sqrt((1.0*img(:,:,1)-1.0*red_color).^2+ ...
+                       (1.0*img(:,:,2)-1.0*green_color).^2+ ...
+                       (1.0*img(:,:,3)-1.0*blue_color).^2) < range;
 
 blobs = zeros(size(blob_pixel_mask,1), size(blob_pixel_mask,2));
 
-disp(blob_pixel_mask)
+% disp(blob_pixel_mask)
 
 current_blob = 0;
 
@@ -29,7 +29,7 @@ for i = 1:size(blob_pixel_mask,1)
             if(i > 1 && j > 1 && ...
                     blobs(i-1,j) ~= blobs(i,j-1) && ...
                     blobs(i-1,j) ~= 0 && blobs(i,j-1) ~= 0)
-                % follow labels backwards
+                % follow labels backwards to top
                 uplabel = blobs(i,j-1);
                 lowlabel = blobs(i-1,j);
                 while blob_mapper(uplabel) ~= uplabel
@@ -41,7 +41,6 @@ for i = 1:size(blob_pixel_mask,1)
                 if uplabel ~= lowlabel
                     blob_mapper(lowlabel) = uplabel;
                 end
-                % blob_mapper(blobs(i,j-1)) = blobs(i-1,j);
                 blobs(i,j) = blobs(i,j-1);
             elseif(i > 1 && blob_pixel_mask(i-1,j) == 1)
                 blobs(i,j) = blobs(i-1,j);
@@ -61,24 +60,18 @@ end
 for i = 1:size(blobs,1)
     for j = 1:size(blobs,2)
         if(blobs(i,j) == 0)
-            break
+            continue
         end
         label = blobs(i,j);
         while(blob_mapper(label) ~= label)
             label = blob_mapper(label);
         end
-        blob(i,j) = label;
+        blobs(i,j) = label;
         blob_counter(blobs(i,j)) = blob_counter(blobs(i,j)) + 1;
     end
 end
 
-% find the biggest blob
-biggest_blob_index = 1;
-for i = 1:size(blob_counter)
-    if blob_counter(i) > blob_counter(biggest_blob_index)
-        biggest_blob_index = i;
-    end
-end
+[area,biggest_blob_index] = max(blob_counter);
 
 % find the center
 sum_x = 0;
@@ -86,19 +79,25 @@ sum_y = 0;
 for i = 1:size(blobs,1)
     for j = 1:size(blobs,2)
         if(blobs(i,j) == biggest_blob_index)
-            sum_x = sum_x + i;
-            sum_y = sum_y + j;
+            % flipped indicies, array access is backwards
+            sum_y = sum_y + i;
+            sum_x = sum_x + j;
         end
     end
 end
 
-area = blob_counter(biggest_blob_index);
-
 center = [sum_x / area, sum_y / area];
 
-% disp(center);
-% disp(area);
+% DEBUG
+%c = round(center);
+%dim = size(img);
+%ly = max(c(1) - 10, 1); uy = min(c(1) + 10, dim(2));
+%lx = max(c(2) - 10, 1); ux = min(c(2) + 10, dim(1));
+%img([ly:uy], [lx:ux],:) = 255;
+%img = uint8(img);
+%imshow(img)
+
+disp(center);
+disp(area);
 
 end
-
-

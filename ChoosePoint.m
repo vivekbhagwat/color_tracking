@@ -8,8 +8,9 @@ image(img);
 p = round(ginput(1));
 disp(p);
 
-color = img(p(1),p(2),:);
+color = img(p(2),p(1),:);
 color = [color(1), color(2), color(3)];
+disp(color);
 
 close(f);
 
