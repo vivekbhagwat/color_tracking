@@ -37,6 +37,12 @@ function [ ] = DoorFinder(serPort)
         dx = (position - center)/center(1);
     end
     %move until bump
+    for i = 1:2
+        [br,bl, wr,wl,wc, bf] = BumpsWheelDropsSensorsRoomba(serPort);
+        while ~(br || bl || bf)
+            
+        end
+    end
     %move back
     %move until bump
     %move back
