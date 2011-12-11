@@ -15,7 +15,7 @@ blob_pixel_mask = sqrt((1.0*img(:,:,1)-1.0*red_color).^2+ ...
 
 blobs = zeros(size(blob_pixel_mask,1), size(blob_pixel_mask,2));
 
-% disp(blob_pixel_mask)
+% imshow(blob_pixel_mask)
 
 current_blob = 0;
 
@@ -72,6 +72,13 @@ for i = 1:size(blobs,1)
 end
 
 [area,biggest_blob_index] = max(blob_counter);
+
+area_dims = size(area);
+if area_dims(1) == 0
+    area = -1;
+    center = [0,0];
+    return
+end
 
 % find the center
 sum_x = 0;
