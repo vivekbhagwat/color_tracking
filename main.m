@@ -13,10 +13,10 @@ while (1)
         % find the largest blob of the given color
         img = GetImage();
         [position, new_area] = find_largest_blob(img, color);
-        %if new_area < 0
-        %    ReactToBlob(serPort, 0.0, 1.0);
-        %    continue
-        %end
+        if new_area < 0
+            ReactToBlob(serPort, 0.0, 1.0);
+            continue
+        end
 
         % we only care about the differences
         dpos = (position - center)/center(1);
