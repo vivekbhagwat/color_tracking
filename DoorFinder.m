@@ -18,7 +18,7 @@ function [ ] = DoorFinder(serPort)
 %         pause(1.5 - mult/4.0); %tbd
 %         mult = mult*-1;
         SetFwdVelRadiusRoomba(serPort,.05,0);
-
+        disp(area);
         img = GetImage();
         [~, area] = find_largest_blob(img, color);
     end
