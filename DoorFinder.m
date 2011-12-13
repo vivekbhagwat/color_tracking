@@ -69,8 +69,10 @@ function [ ] = DoorFinder(serPort)
 %     end
 
     function untilBump()
-        for i = 1:2
-            br = NaN;
+        br = NaN;
+        bl = NaN;
+        bf = NaN;
+        while ~(br == 1 && bl == 1 && bf == 1)
             while isNaN(br) || isNaN(bl) || isNaN(bf)
                 try
                     [br,bl, ~,~,~, bf] = BumpsWheelDropsSensorsRoomba(serPort);
@@ -78,10 +80,6 @@ function [ ] = DoorFinder(serPort)
                     disp(err);
                     continue
                 end
-            end
-
-            if br == 1 || bl == 1 || bf == 1
-                break
             end
         end
     end
