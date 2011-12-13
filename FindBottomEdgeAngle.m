@@ -108,4 +108,5 @@ disp(miny);
 
 % find lowest line
 
+theta = minth;
 end

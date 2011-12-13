@@ -1,7 +1,7 @@
 function [middle, area] = find_largest_blob( img, color )
 
 % find all the colors similar to the given
-blob_pixel_mask = ThersholdColor(img, color);
+blob_pixel_mask = ThresholdColor(img, color);
 
 blobs = zeros(size(blob_pixel_mask,1), size(blob_pixel_mask,2));
 
