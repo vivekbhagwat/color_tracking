@@ -106,6 +106,6 @@ disp(minth);
 disp(minr);
 disp(miny);
 
-% find lowest line
+theta = -(mod(minth, pi) - pi/2);
 
 end
