@@ -67,10 +67,10 @@ miny = size(img, 1);
 minth = -1;
 minr = -1;
 % DEBUG
-figure
-hold off
-clf
-hold on
+%figure
+%hold off
+%clf
+%hold on
 for i = 1:size(h_array,1)
     for j = 1:size(h_array,2)
         if h_array(i,j) == 0
@@ -83,10 +83,10 @@ for i = 1:size(h_array,1)
             continue;
         end
         % DEBUG
-        x = 0:1:size(img,2);
-        y = (cos(theta)*x + r)/sin(theta);
+        %x = 0:1:size(img,2);
+        %y = (cos(theta)*x + r)/sin(theta);
         disp([theta,r, j]);
-        plot(x,y);
+        % plot(x,y);
         
         r = (j/size(h_array,2)-0.5) * 2*max_r;
         % find lowest y
