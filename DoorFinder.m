@@ -14,7 +14,7 @@ function [ ] = DoorFinder(serPort)
     %searches for blue
     mult = 1;
     while(area < 8000) %tbd
-        SetFwdVelRadiusRoomba(serPort,.05, mult*2); %tbd
+        SetFwdVelRadiusRoomba(serPort,.05, mult*.2); %tbd
         pause(1.0); %tbd
         mult = mult*-1;
         img = GetImage();
