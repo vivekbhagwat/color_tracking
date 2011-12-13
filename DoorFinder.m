@@ -70,25 +70,40 @@ function [ ] = DoorFinder(serPort)
 %     
 %         dx = (position - center)/center(1);
 %     end
-    %move until bump
-    for i = 1:2
-        br = NaN;
-        while isNaN(br) || isNaN(bl) || isNaN(bf)
-            try
-                [br,bl, ~,~,~, bf] = BumpsWheelDropsSensorsRoomba(serPort);
-            catch err
-                disp(err);
-                continue
+
+    function untilBump()
+        for i = 1:2
+            br = NaN;
+            while isNaN(br) || isNaN(bl) || isNaN(bf)
+                try
+                    [br,bl, ~,~,~, bf] = BumpsWheelDropsSensorsRoomba(serPort);
+                catch err
+                    disp(err);
+                    continue
+                end
+            end
+
+            if br == 1 || bl == 1 || bf == 1
+                break
             end
         end
-        while ~(br || bl || bf)
-            %move forward.
-        end
     end
-    %move back
+
+    fwd_speed = 0.06;
     %move until bump
+    SetFwdVelAngVelCreate(serPort, Inf, fwd_speed);
+    untilBump();
+    SetFwdVelAngVelCreate(serPort, Inf, 0);
     %move back
+    travelDist(serPort, fwd_speed, -0.2);
+    %move until bump
+    SetFwdVelAngVelCreate(serPort, Inf, fwd_speed);
+    untilBump();
+    SetFwdVelAngVelCreate(serPort, Inf, 0);
+    %move back
+    travelDist(serPort, fwd_speed, -0.2);
     %pause and emit sound
-    %move forward into the room.
     
+    %move forward into the room. Assume the room is infinite in size
+    SetFwdVelAngVelCreate(serPort, Inf, fwd_speed);
 end
