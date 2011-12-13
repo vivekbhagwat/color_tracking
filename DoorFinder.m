@@ -100,6 +100,7 @@ function [ ] = DoorFinder(serPort)
     travelDist(serPort, fwd_speed, -0.2);
     %pause and emit sound
     RoombaSong(serPort);
+    pause(5.0);
     %move forward into the room. Assume the room is infinite in size
     SetFwdVelAngVelCreate(serPort, fwd_speed, 0);
 end

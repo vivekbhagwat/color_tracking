@@ -9,7 +9,7 @@ try
     end
 
     global td
-    fwrite(serPort, [140 1 2 69 81])
+    fwrite(serPort, [140 1 2 69 64 81 64])
     pause(td)
     
     fwrite(serPort, [141 1])
