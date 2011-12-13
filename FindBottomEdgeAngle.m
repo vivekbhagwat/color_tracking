@@ -104,5 +104,5 @@ disp(miny);
 
 theta = -(mod(minth, pi) - pi/2);
 
-theta = minth;
+theta = 180*minth/pi;
 end
