@@ -32,26 +32,32 @@ max_r = sqrt(size(edge_img,1).^2 + size(edge_img,2).^2);
 edge_img = edge_img > 0.5; % thresh the edge
 for i = 1:size(edge_img,1)
     for j = 1:size(edge_img,2)
-        for a = 1:size(h_array,1)
-            theta = a/size(h_array,1)*2*pi;
-            % flip the image here
-            rho = j*cos(theta) + i*sin(theta);
-            r = round((rho/(2*max_r)+0.5)*size(h_array,2));
-            r = min(max(r, 1), size(h_array, 2));
-            h_array(a,r) = 1 + h_array(a,r);
+        if edge_img(i,j) == 1
+            for a = 1:size(h_array,1)
+                theta = a/size(h_array,1)*2*pi;
+                % flip the image here
+                rho = j*cos(theta) + i*sin(theta);
+                r = round((rho/(2*max_r)+0.5)*size(h_array,2));
+                r = min(max(r, 1), size(h_array, 2));
+                h_array(a,r) = 1 + h_array(a,r);
+            end
         end
     end
 end
 
 % DEBUG convert to uint
 %m = max(max(h_array));
-%h_array = uint8(255*(h_array/m).^1);
+%h_array = uint8(((255*h_array)/m).^1);
 %imshow(h_array);
 
 % find the local maxima
 % can get a better max with iterative max(max())
 h_max = max(max(h_array));
-h_array = double(h_array > 0.98*h_max);
+h_array = double(h_array > 0.7*h_max);
+
+m = max(max(h_array));
+h_array = uint8(((255*h_array)/m).^1);
+imshow(h_array);
 
 % reject non-horizontal lines
 a_thresh = 45;
@@ -74,20 +80,21 @@ for i = 1:size(h_array,1)
         if h_array(i,j) == 0
             continue
         end
-        theta = i/size(h_array,1) * pi;
+        theta = i/size(h_array,1) * 2*pi;
         r = (j/size(h_array,2)-0.5) * 2*max_r;
-        % DEBUG
-        x = 0:1:size(img,2);
-        y = (sin(theta)*x + r)/cos(theta);
-        disp([theta,r]);
-        plot(x,y);
         if ~(theta > th_bounds90(1) && theta < th_bounds90(2) ||...
              theta > th_bounds270(1) && theta < th_bounds270(2))
             continue;
         end
+        % DEBUG
+        x = 0:1:size(img,2);
+        y = (cos(theta)*x + r)/sin(theta);
+        disp([theta,r, j]);
+        plot(x,y);
+        
         r = (j/size(h_array,2)-0.5) * 2*max_r;
         % find lowest y
-        y = -cos(theta)/sin(theta)*midx + r/sin(theta);
+        y = (cos(theta)*size(img,2) + r)/sin(theta);
         if y < miny && y > 0
             miny = y;
             minth = theta;
