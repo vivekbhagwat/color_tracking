@@ -55,10 +55,6 @@ end
 h_max = max(max(h_array));
 h_array = double(h_array > 0.7*h_max);
 
-m = max(max(h_array));
-h_array = uint8(((255*h_array)/m).^1);
-imshow(h_array);
-
 % reject non-horizontal lines
 a_thresh = 45;
 th_bounds90 = [((90-a_thresh)*pi/180),...
