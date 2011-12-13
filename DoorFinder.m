@@ -2,7 +2,7 @@ function [ ] = DoorFinder(serPort)
 
     img = GetImage();
     
-    color = [0 235 0]; %tbd, supposed to be a blue door.
+    color = [59 59 83]; %tbd, supposed to be a blue door.
     
     center = size(img)/2;
     center = center(1:2);
@@ -21,17 +21,19 @@ function [ ] = DoorFinder(serPort)
         [~, area] = find_largest_blob(img, color);
     end
     
-    
-    angle = 45; %THIS WILL USE NATHAN'S METHOD
-    turnAngle(serPort, turnSpeed, angle);
-    
     img = GetImage();
     [position, area] = find_largest_blob(img, color);
+    
+    angle = findBottomEdgeAngle(img, color);%45; %THIS WILL USE NATHAN'S METHOD
+    turnSpeed = 0.03;
+    turnAngle(serPort, turnSpeed, angle);
+    
     
     dx = (position - center)/center(1);
     SetFwdVelAngVelCreate(serPort, 0.1, 0);
     pause(0.5);
-    turnAngle(serPort,turnSpeed,-1*sign(angle)*90);    
+    turnAngle(serPort,turnSpeed,-1*sign(round(angle)));    
+    
     
     %should be perpendicular to door at this point.
     
