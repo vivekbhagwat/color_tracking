@@ -12,14 +12,17 @@ function [ ] = DoorFinder(serPort)
 
     %will break from this loop
     %searches for blue
-    sign = 1;
-    while(area < 150) %tbd
-        SetFwdVelRadiusRoomba(serPort,20, sign*2); %tbd
+    mult = 1;
+    while(area < 8000) %tbd
+        SetFwdVelRadiusRoomba(serPort,.05, mult*2); %tbd
         pause(1.0); %tbd
-        sign = sign*-1;
+        mult = mult*-1;
         img = GetImage();
         [~, area] = find_largest_blob(img, color);
     end
+    
+    disp('area = ');
+    disp(area);
     
     img = GetImage();
     [position, area] = find_largest_blob(img, color);
@@ -32,6 +35,7 @@ function [ ] = DoorFinder(serPort)
     dx = (position - center)/center(1);
     SetFwdVelAngVelCreate(serPort, 0.1, 0);
     pause(0.5);
+%     disp(-1*sign(round(angle)));
     turnAngle(serPort,turnSpeed,-1*sign(round(angle)));    
     
     
