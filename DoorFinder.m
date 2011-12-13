@@ -69,7 +69,15 @@ function [ ] = DoorFinder(serPort)
 %     end
     %move until bump
     for i = 1:2
-        [br,bl, wr,wl,wc, bf] = BumpsWheelDropsSensorsRoomba(serPort);
+        br = NaN;
+        while isNaN(br) || isNaN(bl) || isNaN(bf)
+            try
+                [br,bl, ~,~,~, bf] = BumpsWheelDropsSensorsRoomba(serPort);
+            catch err
+                disp(err);
+                continue
+            end
+        end
         while ~(br || bl || bf)
             %move forward.
         end
@@ -81,5 +89,3 @@ function [ ] = DoorFinder(serPort)
     %move forward into the room.
     
 end
-
-
