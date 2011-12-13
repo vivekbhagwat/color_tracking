@@ -62,7 +62,7 @@ for i = 1:size(blobs,1)
 end
 
 [area,biggest_blob_index] = max(blob_counter);
-disp(blob_counter);
+% disp(blob_counter);
 
 
 area_dims = size(area);
@@ -85,7 +85,7 @@ for i = 1:size(blobs,1)
     end
 end
 
-disp(size(area));
+% disp(size(area));
 middle = [sum_x / area, sum_y / area];
 
 % DEBUG
@@ -97,7 +97,7 @@ middle = [sum_x / area, sum_y / area];
 %img = uint8(img);
 %imshow(img)
 
-disp(middle);
-disp(area);
+% disp(middle);
+% disp(area);
 
 end
