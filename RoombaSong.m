@@ -1,7 +1,6 @@
 function [] = RoombaSong(serPort);
 
 try
-    
     %Flush Buffer    
     N = serPort.BytesAvailable();
     while(N~=0) 
@@ -10,8 +9,7 @@ try
     end
 
     global td
-    
-    
+    fwrite(serPort, [140 1 2 69 81])
     pause(td)
     
     fwrite(serPort, [141 1])
