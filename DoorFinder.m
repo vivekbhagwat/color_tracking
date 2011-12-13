@@ -76,13 +76,11 @@ function [ ] = DoorFinder(serPort)
         bl = NaN;
         bf = NaN;
         while ~(br == 1 && bl == 1 && bf == 1)
-            while isNaN(br) || isNaN(bl) || isNaN(bf)
-                try
-                    [br,bl, ~,~,~, bf] = BumpsWheelDropsSensorsRoomba(serPort);
-                catch err
-                    disp(err);
-                    continue
-                end
+            try
+                [br,bl, ~,~,~, bf] = BumpsWheelDropsSensorsRoomba(serPort);
+            catch err
+                disp(err);
+                continue
             end
         end
     end
