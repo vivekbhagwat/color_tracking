@@ -88,19 +88,19 @@ function [ ] = DoorFinder(serPort)
 
     fwd_speed = 0.06;
     %move until bump
-    SetFwdVelAngVelCreate(serPort, Inf, fwd_speed);
+    SetFwdVelAngVelCreate(serPort, fwd_speed, 0);
     untilBump();
-    SetFwdVelAngVelCreate(serPort, Inf, 0);
+    SetFwdVelAngVelCreate(serPort, 0, 0);
     %move back
     travelDist(serPort, fwd_speed, -0.2);
     %move until bump
-    SetFwdVelAngVelCreate(serPort, Inf, fwd_speed);
+    SetFwdVelAngVelCreate(serPort, fwd_speed, 0);
     untilBump();
-    SetFwdVelAngVelCreate(serPort, Inf, 0);
+    SetFwdVelAngVelCreate(serPort, 0, 0);
     %move back
     travelDist(serPort, fwd_speed, -0.2);
     %pause and emit sound
     
     %move forward into the room. Assume the room is infinite in size
-    SetFwdVelAngVelCreate(serPort, Inf, fwd_speed);
+    SetFwdVelAngVelCreate(serPort, fwd_speed, 0);
 end
