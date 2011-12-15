@@ -2,7 +2,7 @@ function [ ] = DoorFinder(serPort)
 
     img = GetImage();
     
-    color = [59 59 83]; %tbd, supposed to be a blue door.
+    color = [60 70 90]; %tbd, supposed to be a blue door.
     
     center = size(img)/2;
     center = center(1:2);
@@ -30,32 +30,36 @@ function [ ] = DoorFinder(serPort)
     img = GetImage();
     [position, area] = find_largest_blob(img, color);
     
-    angle = findBottomEdgeAngle(img, color);%45; %THIS WILL USE NATHAN'S METHOD
-    turnSpeed = 0.03;
-    turnAngle(serPort, turnSpeed, angle);
-    
-    
-    dx = (position - center)/center(1);
-    SetFwdVelAngVelCreate(serPort, 0.1, 0);
-    pause(0.5);
-%     disp(-1*sign(round(angle)));
-    turnAngle(serPort,turnSpeed,-1*sign(round(angle)));    
-    
-    
-    %should be perpendicular to door at this point.
-    
-    while(abs(dx) > 0.1)
-        turnAngle(serPort,turnSpeed,sign(dx)*90);
-        pause(0.5);
-        SetFwdVelAngVelCreate(serPort,0.1,0);
-        pause(0.5);
-        turnAngle(serPort,turnSpeed,-1*sign(dx)*90);
-        
-        img = GetImage();
-        [position, area] = find_largest_blob(img, color);
-    
-        dx = (position - center)/center(1);
-    end
+%     angle = findBottomEdgeAngle(img, color);
+%     angle = sign(angle)*(90-abs(angle));
+%     turnSpeed = 0.03;
+%     turnAngle(serPort, turnSpeed, angle);
+%     disp('turned angle');
+%     disp(angle);
+%     
+%     dx = -1*sign(angle);%(position - center)/center(1);
+%     SetFwdVelAngVelCreate(serPort, 0.1, 0);
+%     pause(0.5);
+% %     disp(-1*sign(round(angle)));
+% %     turnAngle(serPort,turnSpeed,-1*round(angle));    
+%     
+%     
+%     %should be perpendicular to door at this point.
+%     setFwdVelAngVelCreate(serPort,0,0);
+%     while(abs(dx) > 0.1)
+%         disp('this is in the loop');
+%         turnAngle(serPort,turnSpeed,sign(dx)*90);
+%         pause(0.5);
+%         SetFwdVelAngVelCreate(serPort,0.1,0);
+%         pause(0.5);
+%         SetFwdVelAngVelCreate(serPort,0,0);
+%         turnAngle(serPort,turnSpeed,-1*sign(dx)*90);
+%         
+%         img = GetImage();
+%         [position, area] = find_largest_blob(img, color);
+%     
+%         dx = (position - center)/center(1);
+%     end
     %centers on door
     
     
@@ -75,7 +79,7 @@ function [ ] = DoorFinder(serPort)
         br = NaN;
         bl = NaN;
         bf = NaN;
-        while ~(br == 1 && bl == 1 && bf == 1)
+        while ~(br == 1 || bl == 1 || bf == 1)
             try
                 [br,bl, ~,~,~, bf] = BumpsWheelDropsSensorsRoomba(serPort);
             catch err
